@@ -2,16 +2,13 @@
 This repository contains all the supplimentary informations of Matisse
 MATISSE, a novel algorithm that analyses protein binding pockets using water molecules and short molecular dynamics (MD) simulations. This method addresses the limitations of conventional tools by exploring the binding pocket's spatial and volumetric properties. MATISSE enhances our understanding of protein-ligand interactions by accounting for the dynamic geometry and flexibility of binding pockets.
 Supporting Information
-Algorithm S1. Software-Independent Pseudocode for MATISSE Volumetric-Topology Characterization
-Scope. This pseudocode is derived from the operational logic of the MATISSE macro newMatisse_v5.mcr. YASARA-specific visualization and user-interface commands are omitted. Software-specific preprocessing commands that do not define the volumetric geometry are identified separately so that the scientific workflow can be independently reimplemented with freely available computational tools.
-Important implementation note. The original macro stores the water–water distance matrix before the five annealing/measurement cycles. The pseudocode below preserves that behavior explicitly. If the production implementation is intended instead to use cycle-specific water coordinates for sphere–sphere distances, that point should be confirmed before the pseudocode is used as the definitive reproducibility description.
-Inputs and fixed parameters
+
 Item
 Value / definition
 Source in macro
 Input structure
-YASARA scene containing protein as object 1 and ligand as object 2
-LoadSce; object checks
+complex containing protein as object 1 and ligand as object 2
+Loadcomplex; object checks
 Measurement cycles
 5
 numeroCicli = 5
@@ -118,24 +115,4 @@ Two-sphere intersection volume: V_ij = π(r_i+r_j-d_ij)²[d_ij²+2d_ijr_i+2d_ijr
 Cycle pairwise-intersection sum: V_intersect,cycle = Σ_{i<j} V_ij
 Downstream descriptor used in the manuscript. The uploaded macro returns V, stV, V_intersect, and stV_intersect. If the manuscript defines the effective-volume descriptor as V_e = V - V_intersect, this calculation is downstream of the macro and should be documented as such.
 Non-proprietary Python reimplementation: suggested component mapping
-The pseudocode is intentionally software-independent. A researcher could implement the same algorithmic operations using freely available Python packages. The package names below are examples, not requirements and do not imply that they were used to generate the reported MATISSE data.
-Operation
-Example free Python tool
-Implementation requirement
-Structure parsing and atom/residue selections
-MDAnalysis or BioPython
-Preserve atom identities and separate protein/ligand/water groups.
-Molecular mechanics, solvation, minimization/short relaxation
-OpenMM
-Match the force field, water model, cell, restraints/fixed atoms, cutoff, and relaxation protocol used in MATISSE.
-Nearest-protein-atom search
-SciPy cKDTree or NumPy
-For each retained water oxygen, return the minimum Cartesian distance to any protein atom.
-Sphere geometry and pairwise intersections
-NumPy
-Implement the analytical sphere-volume and two-sphere intersection equations shown above.
-Cycle statistics and output
-NumPy / pandas
-Compute five-cycle mean and standard deviation and export the descriptor table.
-Source-specific preprocessing notes
-The original macro also deletes residues named DOD and replaces molybdenum atoms with cobalt if molybdenum is detected. These commands are retained here as source-specific preprocessing behavior but do not define the general sphere-based volumetric calculation. Their scientific necessity should be specified separately if they are relevant to any structures in the reported dataset.
+The pseudocode is intentionally software-independent. A researcher could implement the same algorithmic operations using freely available Python packages. 
